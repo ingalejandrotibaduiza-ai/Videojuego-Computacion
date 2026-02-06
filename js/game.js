@@ -14,10 +14,20 @@ let snake, dir, nextDir, food, score, gameOver, paused;
 let lastTime = 0;
 let acc = 0;
 
+const hudScore = document.getElementById("hud-score");
+const hudSpeed = document.getElementById("hud-speed");
+const hudStatus = document.getElementById("hud-status");
+
 const sheet = new Image();
 sheet.src = "assets/img/snake_sheet.png";
 let sheetReady = false;
 sheet.onload = () => (sheetReady = true);
+
+const foodImg = new Image();
+foodImg.src = "assets/img/food.png";
+let foodReady = false;
+foodImg.onload = () => (foodReady = true);
+
 
 const TILE = 42;
 const HEAD_OFFSET = -Math.PI / 2;
@@ -36,6 +46,13 @@ function spawnFood() {
     f = { x: randInt(0, COLS), y: randInt(0, ROWS) };
     if (!snake.some(s => samePos(s, f))) return f;
   }
+}
+
+function refreshHUD() {
+  if (!hudScore || !hudSpeed || !hudStatus) return;
+  hudScore.textContent = score;
+  hudSpeed.textContent = `${Math.round(1000 / STEP_MS)} mov/s`;
+  hudStatus.textContent = gameOver ? "GAME OVER" : (paused ? "PAUSA" : "JUGANDO");
 }
 
 function resetGame() {
@@ -59,6 +76,7 @@ function resetGame() {
 
   lastTime = performance.now();
   acc = 0;
+  refreshHUD();
 }
 
 function isOpposite(a, b) {
@@ -81,6 +99,8 @@ window.addEventListener("keydown", (e) => {
 
   if (k === "+" || k === "=") STEP_MS = Math.max(60, STEP_MS - 10);
   if (k === "-" || k === "_") STEP_MS = Math.min(250, STEP_MS + 10);
+
+  refreshHUD();
 });
 
 function updateStep() {
@@ -93,12 +113,14 @@ function updateStep() {
 
   if (newHead.x < 0 || newHead.x >= COLS || newHead.y < 0 || newHead.y >= ROWS) {
     gameOver = true;
+    refreshHUD();
     return;
   }
 
   for (let i = 0; i < snake.length; i++) {
     if (samePos(snake[i], newHead)) {
       gameOver = true;
+      refreshHUD();
       return;
     }
   }
@@ -108,6 +130,7 @@ function updateStep() {
   if (samePos(newHead, food)) {
     score++;
     food = spawnFood();
+    refreshHUD();
   } else {
     snake.pop();
   }
@@ -211,8 +234,13 @@ function draw() {
     ctx.stroke();
   }
 
+  if (foodReady) {
+  ctx.drawImage(foodImg, food.x * CELL, food.y * CELL, CELL, CELL);
+} else {
   ctx.fillStyle = "#ef4444";
   ctx.fillRect(food.x * CELL, food.y * CELL, CELL, CELL);
+}
+
 
   if (sheetReady) {
     const h = snake[0];
@@ -227,20 +255,12 @@ function draw() {
     drawFallbackSnake();
   }
 
-  ctx.fillStyle = "#e5e7eb";
-  ctx.font = "18px system-ui";
-  ctx.fillText(`Puntos: ${score}`, 14, 24);
-  ctx.fillText(`Velocidad: ${Math.round(1000 / STEP_MS)} mov/s`, 140, 24);
-  ctx.fillText("WASD / Flechas | P pausa | R reiniciar | +/- velocidad", 320, 24);
-
   if (paused) {
     ctx.fillStyle = "rgba(0,0,0,0.55)";
     ctx.fillRect(0, 0, W, H);
     ctx.fillStyle = "#ffffff";
     ctx.font = "44px system-ui";
     ctx.fillText("PAUSA", W / 2 - 70, H / 2);
-    ctx.font = "18px system-ui";
-    ctx.fillText("Presiona P para continuar", W / 2 - 120, H / 2 + 30);
   }
 
   if (gameOver) {

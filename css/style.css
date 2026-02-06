@@ -14,11 +14,64 @@ body {
 .app {
   text-align: center;
   padding: 16px;
+  width: min(980px, 100%);
 }
 
 .title {
   margin: 0 0 12px 0;
   font-size: 24px;
+}
+
+.hud {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  margin: 10px 0 14px;
+}
+
+.hud-card {
+  min-width: 160px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  backdrop-filter: blur(8px);
+  text-align: left;
+}
+
+.hud-card-wide {
+  min-width: 320px;
+  flex: 1;
+  max-width: 520px;
+}
+
+.hud-label {
+  font-size: 12px;
+  opacity: 0.8;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.hud-value {
+  margin-top: 6px;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+
+#hud-score { color: #22c55e; }
+#hud-speed { color: #60a5fa; }
+#hud-status { color: #fbbf24; }
+
+.hud-sub {
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.75;
+  line-height: 1.2;
 }
 
 #game {

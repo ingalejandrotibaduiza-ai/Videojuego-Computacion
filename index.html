@@ -9,9 +9,28 @@
 </head>
 <body>
   <main class="app">
-    <h1 class="title">Mi Juego</h1>
-    <canvas id="game" width="800" height="450" aria-label="Área de juego"></canvas>
-    <p class="hint">DIVIERTETE</p>
-  </main>
+  <h1 class="title">Mi Juego</h1>
+
+  <section class="hud" aria-label="Marcadores del juego">
+    <div class="hud-card">
+      <div class="hud-label">Puntos</div>
+      <div class="hud-value" id="hud-score">0</div>
+    </div>
+
+    <div class="hud-card">
+      <div class="hud-label">Velocidad</div>
+      <div class="hud-value" id="hud-speed">0</div>
+    </div>
+
+    <div class="hud-card hud-card-wide">
+      <div class="hud-label">Estado</div>
+      <div class="hud-value" id="hud-status">LISTO</div>
+      <div class="hud-sub" id="hud-controls">WASD/Flechas · P pausa · R reiniciar · +/- velocidad</div>
+    </div>
+  </section>
+
+  <canvas id="game" width="800" height="450" aria-label="Área de juego"></canvas>
+</main>
+
 </body>
 </html>
